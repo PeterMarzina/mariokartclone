@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Mijn 3D Game</title>
+  <style>
+    body { margin: 0; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <!-- Three.js via CDN — geen installatie nodig! -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+  <script>
+    // 1. Scene, camera en renderer aanmaken
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+    renderer.setSize(innerWidth, innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // 2. Licht toevoegen
+    const licht = new THREE.DirectionalLight(0xffffff, 1);
+    licht.position.set(5, 10, 5);
+    scene.add(licht);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+
+    // 3. Een kubus (speler-placeholder)
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshStandardMaterial({ color: 0x7c3aed });
+    const kubus    = new THREE.Mesh(geometry, material);
+    scene.add(kubus);
+
+    // 4. Camera plaatsen
+    camera.position.set(0, 2, 5);
+    camera.lookAt(0, 0, 0);
+
+    // 5. Game loop
+    function animate() {
+      requestAnimationFrame(animate);
+      kubus.rotation.y += 0.01; // draai animatie
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // 6. Venster aanpassen bij resize
+    window.addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
